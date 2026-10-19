@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Основні положення Закону України "Про всеукраїнський референдум"</title>
+    <!-- Тематичний фавікон (Протокол) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-size=%2275%22>📝</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar-transition { transition: opacity 0.3s ease; }
+        .sidebar-collapsed { width: 0 !important; min-width: 0 !important; flex-basis: 0 !important; opacity: 0; overflow: hidden; border: none; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        .correct-bg { background-color: #dcfce7 !important; border-color: #22c55e !important; color: #166534; }
+        .incorrect-bg { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b; }
+        .scheme-selected { border-width: 4px; border-color: #3b82f6; }
+        
+        /* Повзунок розтягування */
+        .resizer { width: 8px; cursor: col-resize; background-color: #e2e8f0; transition: background-color 0.2s; z-index: 20; }
+        .resizer:hover, .resizer:active { background-color: #94a3b8; }
+
+        /* Флеш-картка */
+        .flashcard-container { perspective: 1000px; }
+        .flashcard { transition: transform 0.6s; transform-style: preserve-3d; cursor: pointer; position: relative; }
+        .flashcard.is-flipped { transform: rotateY(180deg); }
+        .flashcard-face { backface-visibility: hidden; width: 100%; height: 100%; position: absolute; top: 0; left: 0; display: flex; align-items: center; justify-content: center; border-radius: 0.75rem; padding: 1.5rem; }
+        .flashcard-front { background-color: #2b4c7e; color: white; }
+        .flashcard-back { background-color: #f8fafc; border: 2px solid #2b4c7e; color: #1e293b; transform: rotateY(180deg); }
+
+        /* Drag and Drop Timeline */
+        .drag-item { cursor: grab; user-select: none; transition: transform 0.2s, box-shadow 0.2s; }
+        .drag-item:active { cursor: grabbing; transform: scale(0.98); }
+        .drop-zone { min-height: 4rem; border: 2px dashed #cbd5e1; transition: background-color 0.2s, border-color 0.2s; }
+        .drop-zone.drag-over { background-color: #f1f5f9; border-color: #3b82f6; }
+        
+        /* Обмеження селектів */
+        select { text-overflow: ellipsis; }
+        option { white-space: normal; word-wrap: break-word; }
+    </style>
+</head>
+<body class="flex flex-col h-screen bg-gray-50 font-sans text-gray-800 overflow-hidden">
+
+    <!-- Шапка -->
+    <header class="bg-[#2b4c7e] text-white p-3 shadow-md z-50 flex-shrink-0">
+        <div class="flex flex-wrap justify-between items-center gap-4 max-w-[1600px] mx-auto">
+            <div class="flex items-center gap-3">
+                <button id="toggleSidebar" class="p-2 bg-white/20 rounded hover:bg-white/30 transition" title="Сховати/Показати закон">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+                </button>
+                <h1 class="text-base md:text-xl font-bold hidden md:block whitespace-nowrap">Основні положення Закону України "Про всеукраїнський референдум"</h1>
+            </div>
+            
+            <!-- Навігація між блоками -->
+            <div class="flex gap-1 bg-[#1e3a5f] p-1 rounded-lg overflow-x-auto custom-scrollbar max-w-[65vw]">
+                <button onclick="switchTab('block1')" id="tab-block1" class="nav-tab px-3 py-1.5 rounded-md font-medium text-sm transition bg-white text-[#2b4c7e] shadow-sm whitespace-nowrap">Блок 1</button>
+                <button onclick="switchTab('block2')" id="tab-block2" class="nav-tab px-3 py-1.5 rounded-md font-medium text-sm transition text-white hover:bg-white/10 whitespace-nowrap">Блок 2</button>
+                <button onclick="switchTab('block3')" id="tab-block3" class="nav-tab px-3 py-1.5 rounded-md font-medium text-sm transition text-white hover:bg-white/10 whitespace-nowrap">Блок 3</button>
+                <button onclick="switchTab('block4')" id="tab-block4" class="nav-tab px-3 py-1.5 rounded-md font-medium text-sm transition text-white hover:bg-white/10 whitespace-nowrap">Блок 4</button>
+                <button onclick="switchTab('block5')" id="tab-block5" class="nav-tab px-3 py-1.5 rounded-md font-medium text-sm transition text-white hover:bg-white/10 whitespace-nowrap">Блок 5</button>
+                <button onclick="switchTab('block6')" id="tab-block6" class="nav-tab px-3 py-1.5 rounded-md font-medium text-sm transition text-white hover:bg-white/10 whitespace-nowrap">Блок 6</button>
+            </div>
+
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <button id="clearAnswersBtn" class="px-3 py-2 bg-red-500/90 text-white text-sm font-medium rounded hover:bg-red-600 transition flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                    <span class="hidden sm:inline">Очистити</span>
+                </button>
+                <button id="fullscreenBtn" class="bg-white/20 text-white rounded hover:bg-white/30 transition flex-shrink-0 w-9 h-9 flex items-center justify-center" title="На весь екран">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5M20 8V4m0 0h-4M20 4l-5 5M4 16v4m0 0h4M4 20l5-5M20 16v4m0 0h-4M20 20l-5-5" />
+                    </svg>
+                </button>
+
+            </div>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <!-- Ліва панель (Закон) -->
+        <aside id="sidebar" class="w-[400px] min-w-[250px] bg-white flex flex-col relative z-10 flex-shrink-0 sidebar-transition border-r border-gray-200">
+            <div class="flex justify-between items-center p-3 border-b shadow-sm bg-white flex-shrink-0">
+                <h2 class="font-bold text-lg text-[#2b4c7e] m-0">Текст Закону України "Про всеукраїнський референдум"</h2>
+                <button id="closeSidebarInner" class="text-gray-400 hover:text-red-500 transition" title="Закрити текст закону">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <div class="flex-1 overflow-hidden">
+                <iframe id="lawIframe" src="law.pdf#view=FitH" class="w-full h-full border-none bg-gray-50" title="Текст Закону"></iframe>
+            </div>
+        </aside>
+
+        <!-- Повзунок -->
+        <div id="resizer" class="resizer flex-shrink-0" title="Потягніть для зміни розміру"></div>
+
+        <!-- Права панель (Завдання) -->
+        <main id="mainContent" class="flex-1 overflow-y-auto custom-scrollbar bg-gray-100 relative">
+            <div class="max-w-5xl mx-auto p-4 md:p-8">
+                
+                <!-- ==================== БЛОК 1 ==================== -->
+                <div id="block1" class="space-y-8 tab-content">
+                    <h2 class="text-2xl font-bold text-[#2b4c7e] text-center mb-6">Блок 1. Поняття референдуму</h2>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-[#2b4c7e]">Завдання 1. Заповніть пропуски</h3>
+                            <button onclick="checkB1T1()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Перевірити</button>
+                        </div>
+                        <p class="text-lg leading-loose">
+                            Референдум – це форма <select id="b1_t1_1" onchange="clearColor(this)" class="border border-gray-300 rounded p-1 mx-1 outline-none max-w-[150px]"><option value="">Оберіть...</option><option value="прямої">прямої</option><option value="опосередкованої">опосередкованої</option></select> 
+                            демократії і спосіб здійснення влади <select id="b1_t1_2" onchange="clearColor(this)" class="border border-gray-300 rounded p-1 mx-1 outline-none max-w-[200px]"><option value="">Оберіть...</option><option value="державними службовцями">державними службовцями</option><option value="мешканцями України">мешканцями України</option><option value="українським народом">українським народом</option></select> 
+                            шляхом <select id="b1_t1_3" onchange="clearColor(this)" class="border border-gray-300 rounded p-1 mx-1 outline-none max-w-[180px]"><option value="">Оберіть...</option><option value="опитування">опитування</option><option value="голосування">голосування</option><option value="участі в засіданнях">участі в засіданнях</option></select>.
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg font-bold text-[#2b4c7e]">Завдання 2. Чи правильне твердження?</h3>
+                            <button onclick="checkB1T2()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Перевірити</button>
+                        </div>
+                        
+                        <!-- Оформлення картки як на скриншоті 17 -->
+                        <div class="bg-blue-50 border-2 border-blue-400 shadow-sm rounded-lg py-4 px-6 text-center mb-6 max-w-md mx-auto">
+                            <p class="text-xl font-semibold text-gray-800">Референдум = вибори</p>
+                        </div>
+                        
+                        <div class="flex justify-center gap-6" id="b1_t2_container" onchange="clearContainerColor('b1_t2_container')">
+                            <label class="flex items-center gap-2 cursor-pointer text-lg p-2 rounded"><input type="radio" name="b1_task2" value="Так" class="w-5 h-5"> Так</label>
+                            <label class="flex items-center gap-2 cursor-pointer text-lg p-2 rounded"><input type="radio" name="b1_task2" value="Ні" class="w-5 h-5"> Ні</label>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col" style="max-height: 60vh;">
+                        <div class="bg-gray-50 border-b p-4 flex justify-between items-center flex-shrink-0 z-20">
+                            <h3 class="text-lg font-bold text-[#2b4c7e] m-0">Завдання 3. Визначте характеристики</h3>
+                            <button onclick="checkB1T3()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Перевірити</button>
+                        </div>
+                        <div class="overflow-y-auto custom-scrollbar flex-1 relative">
+                            <div class="sticky top-0 bg-white grid grid-cols-[80px_1fr_80px] md:grid-cols-[120px_1fr_120px] gap-2 md:gap-4 font-bold text-center text-[#2b4c7e] border-b-2 border-gray-200 px-4 py-3 z-10 shadow-sm">
+                                <div>Референдум</div><div>Характеристика</div><div>Вибори</div>
+                            </div>
+                            <div id="b1_table3" class="pb-4"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-[#2b4c7e]">Завдання 4. Оберіть візуальну схему</h3>
+                            <button onclick="checkB1T4()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Перевірити</button>
+                        </div>
+                        <p class="mb-4 text-gray-600">Оберіть схему, яка найкраще відображає співвідношення референдуму та виборів:</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="border-2 rounded-lg p-2 cursor-pointer scheme-card hover:bg-gray-50 transition" onclick="selectScheme(this, 'scheme-1')"><img src="scheme-1.jpg" alt="Схема 1" class="w-full h-32 object-contain bg-gray-100 rounded"><p class="text-center text-sm mt-2">Два окремі кола</p></div>
+                            <div class="border-2 rounded-lg p-2 cursor-pointer scheme-card hover:bg-gray-50 transition" onclick="selectScheme(this, 'scheme-2')"><img src="scheme-2.jpg" alt="Схема 2" class="w-full h-32 object-contain bg-gray-100 rounded"><p class="text-center text-sm mt-2">Вкладені кола</p></div>
+                            <div class="border-2 rounded-lg p-2 cursor-pointer scheme-card hover:bg-gray-50 transition" onclick="selectScheme(this, 'scheme-3')"><img src="scheme-3.jpg" alt="Схема 3" class="w-full h-32 object-contain bg-gray-100 rounded"><p class="text-center text-sm mt-2">Перетин кіл</p></div>
+                            <div class="border-2 rounded-lg p-2 cursor-pointer scheme-card hover:bg-gray-50 transition" onclick="selectScheme(this, 'scheme-4')"><img src="scheme-4.jpg" alt="Схема 4" class="w-full h-32 object-contain bg-gray-100 rounded"><p class="text-center text-sm mt-2">Кола з "="</p></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== БЛОК 2 ==================== -->
+                <div id="block2" class="space-y-8 tab-content hidden">
+                    <h2 class="text-2xl font-bold text-[#2b4c7e] text-center mb-6">Блок 2. Поняття і предмет всеукраїнського референдуму</h2>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-[#2b4c7e]">Завдання 1. Заповніть пропуски</h3>
+                            <button onclick="checkB2T1()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Перевірити</button>
+                        </div>
+                        <p class="text-lg leading-loose">
+                            Поняття всеукраїнського референдуму закріплено в статті <input type="text" id="b2_t1_1" data-correct="1" oninput="clearColor(this)" class="border border-gray-300 rounded px-2 py-1 mx-1 w-16 text-center outline-none focus:border-blue-500 transition"> Закону України «Про Всеукраїнський референдум» від 26 січня <input type="text" id="b2_t1_2" data-correct="2021" oninput="clearColor(this)" class="border border-gray-300 rounded px-2 py-1 mx-1 w-20 text-center outline-none focus:border-blue-500 transition"> року.
+                        </p>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                        <h3 class="text-lg font-bold text-[#2b4c7e] mb-4">Завдання 2. Дайте визначення Всеукраїнського референдуму</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Спробуйте дати визначення самостійно, а потім натисніть на картку, щоб перевірити себе.</p>
+                        <div class="flashcard-container w-full h-48 md:h-40 mx-auto max-w-2xl">
+                            <div class="flashcard w-full h-full shadow-md rounded-xl" onclick="this.classList.toggle('is-flipped')">
+                                <div class="flashcard-face flashcard-front flex-col">
+                                    <span class="text-xl md:text-2xl font-bold tracking-wider text-center">ВСЕУКРАЇНСЬКИЙ РЕФЕРЕНДУМ</span>
+                                    <div class="absolute bottom-3 right-4 flex items-center gap-1 text-white/70 text-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                                    </div>
+                                </div>
+                                <div class="flashcard-face flashcard-back overflow-y-auto custom-scrollbar">
+                                    <p class="text-sm md:text-base text-center leading-relaxed font-medium">
+                                        Всеукраїнський референдум є формою безпосередньої демократії в Україні, способом здійснення влади безпосередньо Українським народом, що полягає у прийнятті (затвердженні) громадянами України рішень шляхом голосування голосування у випадках і порядку, встановлених Конституцією України та Законом «Про Всеукраїнський референдум».
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col" style="max-height: 70vh;">
+                        <div class="bg-gray-50 border-b p-4 flex flex-col md:flex-row justify-between items-start md:items-center flex-shrink-0 z-20 gap-3">
+                            <div>
+                                <h3 class="text-lg font-bold text-[#2b4c7e] m-0">Завдання 3. Предмет референдуму</h3>
+                                <p class="text-sm text-gray-500 mt-1">Визначте, які питання можуть і не можуть бути предметом референдуму. Натисніть [?] для перегляду підказки.</p>
+                            </div>
+                            <button onclick="checkB2T3()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition whitespace-nowrap">Перевірити</button>
+                        </div>
+                        <div class="overflow-y-auto custom-scrollbar flex-1 relative">
+                            <div class="sticky top-0 bg-white grid grid-cols-[1fr_80px_80px] md:grid-cols-[1fr_100px_100px] gap-2 md:gap-4 font-bold text-center text-[#2b4c7e] border-b-2 border-gray-200 px-4 py-3 z-10 shadow-sm text-xs md:text-sm">
+                                <div class="text-left flex items-center">Уявіть, що ці питання пропонують винести на референдум:</div><div class="flex items-center justify-center">Можуть бути</div><div class="flex items-center justify-center">Не можуть</div>
+                            </div>
+                            <div id="b2_table3" class="pb-4"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-[#2b4c7e]">Завдання 4. Заповніть пропуски</h3>
+                            <button onclick="checkB2T4()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Перевірити</button>
+                        </div>
+                        <p class="text-lg leading-loose">
+                            Скільки питань можна виносити на Всеукраїнський референдум? <input type="text" id="b2_t4_1" oninput="clearColor(this)" class="border border-gray-300 rounded px-2 py-1 mx-1 w-24 text-center outline-none focus:border-blue-500 transition" placeholder="...">
+                            Це передбачено в статті <input type="text" id="b2_t4_2" data-correct="3" oninput="clearColor(this)" class="border border-gray-300 rounded px-2 py-1 mx-1 w-16 text-center outline-none focus:border-blue-500 transition"> Закону.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ==================== БЛОК 3 ==================== -->
+                <div id="block3" class="space-y-8 tab-content hidden">
+                    <h2 class="text-2xl font-bold text-[#2b4c7e] text-center mb-6">Блок 3. Основні принципи проведення референдуму</h2>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col mb-8" style="max-height: 80vh;">
+                        <div class="bg-gray-50 border-b p-4 flex flex-col md:flex-row justify-between items-start md:items-center flex-shrink-0 z-20 gap-3 shadow-sm">
+                            <div>
+                                <h3 class="text-lg font-bold text-[#2b4c7e] m-0">Завдання 1. Визначте принципи</h3>
+                                <p class="text-sm text-gray-500 mt-1">Визначте за описом, про який принцип йде мова, та зазначте відповідну статтю Закону.<br>Натисніть [?] для перегляду підказки.</p>
+                            </div>
+                            <button onclick="checkB3T1()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition whitespace-nowrap">Перевірити</button>
+                        </div>
+                        <div class="overflow-y-auto custom-scrollbar flex-1 relative bg-gray-50 p-4 md:p-6">
+                            <div id="b3_cards_container" class="grid grid-cols-1 lg:grid-cols-2 gap-4 pb-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== БЛОК 4 ==================== -->
+                <div id="block4" class="space-y-8 tab-content hidden">
+                    <h2 class="text-2xl font-bold text-[#2b4c7e] text-center mb-6">Блок 4. Призначення Всеукраїнського референдуму</h2>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+                        <div class="bg-gray-50 border-b p-4 flex justify-between items-center flex-shrink-0 z-20 shadow-sm">
+                            <h3 class="text-lg font-bold text-[#2b4c7e] m-0">Завдання 1. Встановіть відповідність</h3>
+                            <button onclick="checkB4T1()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Перевірити</button>
+                        </div>
+                        <div class="overflow-x-auto custom-scrollbar flex-1 relative bg-white">
+                            <div class="min-w-[600px]">
+                                <div class="sticky top-0 bg-white grid grid-cols-[1fr_200px_200px] gap-4 font-bold text-center text-[#2b4c7e] border-b-2 border-gray-200 px-4 py-3 z-10 shadow-sm text-sm">
+                                    <div class="text-left">Предмет референдуму</div><div>Суб’єкт призначення</div><div>Нормативно-правовий акт</div>
+                                </div>
+                                <div id="b4_table1" class="pb-4"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 mb-8">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-[#2b4c7e]">Завдання 2. Заповніть пропуски</h3>
+                            <button onclick="checkB4T2()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Перевірити</button>
+                        </div>
+                        <p class="text-lg leading-loose">
+                            Всеукраїнський референдум проголошується за народною ініціативою на вимогу не менш як <input type="text" id="b4_t2_1" oninput="clearColor(this)" class="border border-gray-300 rounded px-2 py-1 mx-1 w-20 text-center outline-none focus:border-blue-500 transition" placeholder="...">
+                            мільйонів громадян України, які мають право голосу, за умови, що підписи щодо призначення всеукраїнського референдуму зібрано не менш як у <input type="text" id="b4_t2_2" oninput="clearColor(this)" class="border border-gray-300 rounded px-2 py-1 mx-1 w-28 text-center outline-none focus:border-blue-500 transition" placeholder="...">
+                            областей і не менш як по <input type="text" id="b4_t2_3" oninput="clearColor(this)" class="border border-gray-300 rounded px-2 py-1 mx-1 w-20 text-center outline-none focus:border-blue-500 transition" placeholder="...">
+                            тисяч підписів у кожній області. Це передбачено в статті <input type="text" id="b4_t2_4" data-correct="18" oninput="clearColor(this)" class="border border-gray-300 rounded px-2 py-1 mx-1 w-16 text-center outline-none focus:border-blue-500 transition"> Закону України.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- ==================== БЛОК 5 ==================== -->
+                <div id="block5" class="space-y-8 tab-content hidden">
+                    <h2 class="text-2xl font-bold text-[#2b4c7e] text-center mb-6">Блок 5. Процес проведення референдуму за народною ініціативою</h2>
+
+                    <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-[#2b4c7e]">Завдання 1. Визначте послідовність етапів</h3>
+                            <button onclick="checkB5T1()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Перевірити</button>
+                        </div>
+                        <p class="text-gray-600 mb-6 text-sm">Розташуйте етапи проведення референдуму у правильній послідовності (зверху вниз).</p>
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <div class="flex-1 relative">
+                                <div class="absolute left-4 top-0 bottom-0 w-1 bg-blue-200 z-0"></div>
+                                <div class="space-y-4 relative z-10" id="b5_timeline"></div>
+                            </div>
+                            <div class="flex-1 bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                <h4 class="font-bold text-gray-700 mb-4 text-center">Етапи (Перетягніть на лінію часу)</h4>
+                                <div class="space-y-3 drop-zone min-h-[300px] bg-white rounded-lg p-3" id="b5_source_zone"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col mb-8" style="max-height: 80vh;">
+                        <div class="bg-gray-50 border-b p-4 flex justify-between items-center flex-shrink-0 z-20 shadow-sm">
+                            <h3 class="text-lg font-bold text-[#2b4c7e] m-0">Завдання 2. Визначте строки</h3>
+                            <button onclick="checkB5T2()" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">Перевірити</button>
+                        </div>
+                        <div class="overflow-y-auto custom-scrollbar flex-1 relative bg-white p-4 md:p-6">
+                            <div id="b5_tests_container" class="space-y-8 pb-4"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== БЛОК 6 ==================== -->
+                <div id="block6" class="space-y-6 tab-content hidden">
+                    <h2 class="text-2xl font-bold text-[#2b4c7e] text-center mb-2">Блок 6. Етапи всеукраїнського референдуму</h2>
+                    <p class="text-center text-gray-600 mb-6 max-w-3xl mx-auto">Ознайомтеся з кожним етапом, прочитайте зазначені статті та виконайте тести.</p>
+                    
+                    <div class="space-y-6 pb-24" id="b6_cards_container">
+                        <!-- Картки генеруватимуться через JS -->
+                    </div>
+                    
+                    <!-- Плаваюча панель результатів (закріплена внизу екрана) -->
+                   <div class="sticky bottom-2 z-50 pointer-events-none px-2 mt-4" id="b6_score_panel" style="display: none;">
+                        <div class="mx-auto max-w-[600px] bg-white/95 backdrop-blur border-2 border-[#2b4c7e] p-3 shadow-[0_-5px_20px_rgba(0,0,0,0.15)] rounded-2xl pointer-events-auto transition-all">
+                            <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
+                                <div class="text-sm md:text-base font-bold text-[#2b4c7e]">
+                                    Правильних відповідей: <span id="b6_correct_count" class="text-gray-400 text-xl md:text-2xl">0</span> <span class="text-gray-400 text-xs md:text-sm font-normal">з 18</span>
+                                </div>
+                                <div class="text-sm md:text-base font-bold text-[#2b4c7e] flex items-center gap-2 md:gap-3">
+                                    Успішність: 
+                                    <div class="w-24 md:w-32 bg-gray-200 rounded-full h-3 md:h-4 overflow-hidden shadow-inner">
+                                        <div id="b6_progress_bar" class="bg-gray-400 h-full rounded-full transition-all duration-700 w-0"></div>
+                                    </div>
+                                    <span id="b6_percentage" class="text-gray-400 text-xl md:text-2xl w-12 md:w-16 text-right">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Футер -->
+    <footer class="bg-[#1e3a5f] text-white text-center p-3 text-sm z-50 flex-shrink-0 relative">
+        Інтерактив створений Ольгою Герінбург
+    </footer>
+
+    <script>
+        // ==================== ДАНІ ====================
+        const b1_characteristicsData = [ { text: "Форма волевиявлення громадян", ref: true, vyb: true }, { text: "Голосування громадян", ref: true, vyb: true }, { text: "Форма безпосередньої демократії", ref: true, vyb: true }, { text: "Інструмент формування опосередкованої демократії", ref: false, vyb: true }, { text: "Реалізація активного виборчого права", ref: true, vyb: true }, { text: "Реалізація пасивного виборчого права", ref: false, vyb: true }, { text: "Об’єкт - кандидат або список кандидатів", ref: false, vyb: true }, { text: "Об’єкт – правові норми", ref: true, vyb: false }, { text: "Об’єкт – питання зовнішньої або внутрішньої політики", ref: true, vyb: false }, { text: "Мета – обрання народних представників", ref: false, vyb: true }, { text: "Мета – ухвалення рішення з певного питання", ref: true, vyb: false }, { text: "Значення – загальнодержавне", ref: true, vyb: true }, { text: "Значення – місцеве", ref: true, vyb: true }, { text: "Юридична сила – імперативна", ref: true, vyb: true }, { text: "Юридична сила - консультативна", ref: true, vyb: false } ];
+        const b2_questionsData = [ { q: "Чи підтримуєте ви затвердження закону про внесення змін до статті 5 Конституції України, яка визначає Україну як республіку?", can: true, cant: false, exp: "Стаття 5 розташована в розділі I Конституції. Закон про внесення змін до цього розділу може затверджуватися на всеукраїнському референдумі. Конкретні зміни мають відповідати Конституції." }, { q: "Чи підтримуєте ви затвердження закону про внесення змін до розділу Конституції України «Верховна Рада України», щоб змінити віковий ценз для кандидатів у народні депутати з 21 на 30 років?", can: false, cant: true, exp: "Розділ IV не входить до переліку розділів, зміни до яких затверджуються на всеукраїнському референдумі." }, { q: "Чи підтримуєте ви затвердження закону про внесення змін до статті 159 Конституції України щодо порядку надання Конституційним Судом висновку про відповідність законопроєкту вимогам Конституції?", can: true, cant: false, exp: "Стаття 159 належить до розділу XIII. Закон про внесення змін до цього розділу може затверджуватися на всеукраїнському референдумі. Конкретні зміни мають відповідати Конституції." }, { q: "Чи підтримуєте ви вступ Україну до НАТО?", can: true, cant: false, exp: "Вступ України до НАТО — питання загальнодержавного значення. Водночас референдум не замінює передбачених законодавством процедур вступу до Альянсу." }, { q: "Чи підтримуєте ви включення України до складу іншої держави?", can: false, cant: true, exp: "Включення України до складу іншої держави означало б ліквідацію незалежності України." }, { q: "Чи підтримуєте ви заборону громадянам України сповідувати релігію, відмінну від релігії більшості населення?", can: false, cant: true, exp: "Свобода віросповідання є правом людини, а не лише громадян України. Її скасування чи обмеження не може бути предметом референдуму." }, { q: "Чи підтримуєте ви запровадження єдиної державної програми безоплатного забезпечення учнів 1–11 класів підручниками?", can: true, cant: false, exp: "Може бути предметом референдуму як питання загальнодержавного значення." }, { q: "Чи підтримуєте ви запровадження додаткового податку в розмірі 5% від вартості кожної купленої квартири?", can: false, cant: true, exp: "Питання податків прямо виключене з предмета всеукраїнського референдуму." }, { q: "Чи підтримуєте ви втрату чинності положенням закону України, яке вимагає отримання ліцензії для провадження медичної практики?", can: true, cant: false, exp: "Закон дозволяє виносити питання про втрату чинності Законом України або окремими його положеннями" }, { q: "Чи підтримуєте ви затвердження Державного бюджету України на 2027 рік?", can: false, cant: true, exp: "Питання бюджету не можуть бути предметом всеукраїнського референдуму." }, { q: "Чи підтримуєте ви оголошення амністії для всіх осіб, засуджених за ненасильницькі кримінальні правопорушення?", can: false, cant: true, exp: "Питання амністії прямо виключені виключені з предмета всеукраїнського референдуму." }, { q: "Чи підтримуєте ви скасування в Україні права на свободу думки і слова для осіб без громадянства?", can: false, cant: true, exp: "Свобода думки та слова є правом людини. Її скасування для осіб без громадянства також суперечило б гарантіям прав людини." }, { q: "Чи підтримуєте ви визнання громадянина N винним у державній зраді?", can: false, cant: true, exp: "Встановлення винуватості конкретної особи у державній зраді належить до компетенції суду. Не можуть бути предметом всеукраїнського референдуму питання, віднесені Конституцією України і законами України до відання органів правопорядку, прокуратури чи суду." }, { q: "Чи підтримуєте ви затвердження закону про ратифікацію договору між Україною та Угорщиною про уточнення лінії державного кордону?", can: true, cant: false, exp: "Може бути предметом референдуму за умови дотримання конституційної процедури. Стаття 18 Закону передбачає, що питання про зміну території вирішується шляхом затвердження закону про ратифікацію відповідного міжнародного договору." }, { q: "Чи підтримуєте ви територіальні зміни, що передбачають передання частини Закарпатської області України  до складу Угорщини?", can: false, cant: true, exp: "Не може бути предметом референдуму, оскільки питання спрямоване на порушення територіальної цілісності України." } ];
+        const b3_principlesData = [ { text: "Не допускаються обмеження щодо участі громадян України у процесі всеукраїнського референдуму", p: "загальне право голосу", a: "6", hint: "Зверніть увагу на частину 9 статті 6." }, { text: "Ніхто не може бути примушений до підтримки чи непідтримки ініціативи щодо проведення референдуму за народною ініціативою, участі чи неучасті в голосуванні на всеукраїнському референдумі, а також у проведенні агітації чи у здійсненні інших заходів або процедур, передбачених цим Законом.", p: "добровільність участі у всеукраїнському референдумі", a: "10", hint: "Зверніть увагу на статтю 10." }, { text: "Контроль за волевиявленням виборців на всеукраїнському референдумі забороняється.", p: "таємне голосування", a: "11", hint: "Зверніть увагу на частину 1 статті 11." }, { text: "Громадяни України безпосередньо беруть участь у всеукраїнському референдумі та у вирішенні питання, що виноситься на всеукраїнський референдум.", p: "пряме волевиявлення", a: "8", hint: "Зверніть увагу на статтю 8." }, { text: "Кожний виборець на всеукраїнському референдумі має один голос. Виборець може використати свій голос тільки на одній дільниці з всеукраїнського референдуму, де він включений до списку виборців для проведення всеукраїнського референдуму.", p: "рівне право голосу", a: "7", hint: "Зверніть увагу на частину 2 статті 7." }, { text: "Право голосу на всеукраїнському референдумі мають громадяни України, яким на день голосування виповнилося вісімнадцять років і які не визнані у встановленому законом порядку недієздатними. Громадяни України, які мають право голосу, є виборцями.", p: "загальне право голосу", a: "6", hint: "Зверніть увагу на частину 1 статті 6." }, { text: "Центральна виборча комісія, комісії з всеукраїнського референдуму відповідно до своїх повноважень оприлюднюють підсумки голосування та результати всеукраїнського референдуму.", p: "публічність та відкритість процесу всеукраїнського референдуму", a: "14", hint: "Зверніть увагу на частину 2 статті 14." }, { text: "Застосування насильства, погроз, обману, підкупу чи будь-яких інших дій, що перешкоджають вільному формуванню та вільному виявленню волі виборця, забороняється.", p: "вільна участь у всеукраїнському референдумі", a: "9", hint: "Зверніть увагу на частину 2 статті 9." }, { text: "Голосування за інших осіб чи передача виборцем права голосу будь-якій іншій особі забороняється.", p: "особисте голосування", a: "12", hint: "Зверніть увагу на частину 1 статті 12." }, { text: "Для забезпечення умов для вільного волевиявлення військовослужбовцям строкової служби в день голосування надається відпустка для участі в голосуванні на звичайних дільницях з референдуму, приміщення для голосування яких розташовані за межами військових частин (формувань), не менш як на чотири години.", p: "вільна участь у всеукраїнському референдумі", a: "9", hint: "Зверніть увагу на частину 3 статті 9." }, { text: "Будь-які прямі чи непрямі привілеї або обмеження прав громадян на участь у всеукраїнському референдумі за ознаками раси, кольору шкіри, політичних, релігійних та інших переконань, статі, етнічного та соціального походження, майнового стану, місця проживання чи перебування, за мовними або іншими ознаками забороняються.", p: "загальне право голосу", a: "6", hint: "Зверніть увагу на частину 9 статті 6." }, { text: "Заборонено втручання органів державної влади , органів влади Автономної Республіки Крим та органів місцевого самоврядування, їх службових та посадових осіб у процес всеукраїнського референдуму.", p: "рівне право голосу", a: "7", hint: "Зверніть увагу на частину 3 статті 7." }, { text: "З метою створення умов для особистого голосування виборці з порушеннями зору забезпечуються трафаретами для бюлетенів із застосуванням шрифту Брайля, збільшувальними пристроями та іншими засобами.", p: "особисте голосування", a: "12", hint: "Зверніть увагу на частину 3 статті 12." }, { text: "Центральна виборча комісія, комісії з всеукраїнського референдуму відповідно до своїх повноважень оприлюднюють відомості про свій склад, місцезнаходження та режим роботи, про округи та дільниці з всеукраїнського референдуму.", p: "публічність та відкритість процесу всеукраїнського референдуму", a: "14", hint: "Зверніть увагу на частину 2 статті 14." }, { text: "Гарантується неупереджене ставлення засобів масової інформації до всіх суб’єктів процесу всеукраїнського референдуму, об’єктивного та збалансованого висвітлення позицій на підтримку та проти питання всеукраїнського референдуму.", p: "рівне право голосу", a: "7", hint: "Зверніть увагу на частину 3 статті 7." }, { text: "Виборцям, членам комісій з всеукраїнського референдуму, офіційним спостерігачам, засобам масової інформації та їх працівникам, іншим особам забороняється вчиняти будь-які дії чи розголошувати відомості, що дають можливість встановити зміст волевиявлення конкретного виборця.", p: "таємне голосування", a: "11", hint: "Зверніть увагу на частину 2 статті 11." }, { text: "Центральна виборча комісія, комісії з всеукраїнського референдуму відповідно до своїх повноважень забезпечують можливість ознайомлення громадян із списками виборців.", p: "публічність та відкритість процесу всеукраїнського референдуму", a: "14", hint: "Зверніть увагу на частину 2 статті 14." }, { text: "Кожний виборець на конкретному всеукраїнському референдумі може реалізувати право голосу лише один раз і лише на одній дільниці з всеукраїнського референдуму шляхом подання бюлетеня для голосування у паперовій формі або шляхом електронного голосування в порядку, визначеному законом.", p: "однократне голосування", a: "13", hint: "Зверніть увагу на статтю 13." }, { text: "Рішення органів державної влади щодо всеукраїнського референдуму доводяться до відома громадян України через засоби масової інформації та офіційні веб-сайти цих органів у строки та порядку, визначені Законом.", p: "публічність та відкритість процесу всеукраїнського референдуму", a: "14", hint: "Зверніть увагу на частину 3 статті 14." } ];
+        const b3_principleOptions = [ "загальне право голосу", "рівне право голосу", "пряме волевиявлення", "вільна участь у всеукраїнському референдумі", "добровільність участі у всеукраїнському референдумі", "таємне голосування", "особисте голосування", "однократне голосування", "публічність та відкритість процесу всеукраїнського референдуму" ];
+        const b4_matchData = [ { t: "Затвердження змін до розділу I \"Загальні положення\", розділу III \"Вибори. Референдум\" і розділу XIII \"Внесення змін до Конституції України\" Конституції України", sub: "Президент України", act: "Указ" }, { t: "Питання щодо зміни території України", sub: "Верховна Рада України", act: "Постанова" }, { t: "Інші питання, що можуть бути предметом всеукраїнського референдуму та ініційовані за народною ініціативою", sub: "Президент України", act: "Указ" } ];
+        const b4_subOptions = ["Верховна Рада України", "Президент України", "Кабінет Міністрів України", "Конституційний Суд України"];
+        const b4_actOptions = ["Акт", "Закон", "Постанова", "Указ", "Ухвала"];
+        const b5_timelineCorrectOrder = [ "Звернення до Конституційного Суду України щодо конституційності питання, яке пропонується для винесення на всеукраїнський референдум", "Висновок Конституційного Суду про конституційність питань всеукраїнського референдуму", "Публікація указу Президента України або постанови Верховної Ради України про призначення всеукраїнського референдуму", "Початок процесу всеукраїнського референдуму", "Офіційне оголошення Центральною виборчою комісією результатів всеукраїнського референдуму", "Завершення процесу всеукраїнського референдуму" ];
+        const b5_testsData = [ { q: "Не пізніше якого дня від отримання відповідного звернення КСУ має надати висновок про конституційність питання референдуму за народною ініціативою?", type: "radio", opts: ["На десятий день", "На двадцятий день", "На тридцятий день", "На шістдесятий день"], ans: [2], exp: "Частина 4 статті 21 установлює граничний строк не пізніше тридцятого дня від отримання звернення." }, { q: "Коли починається процес всеукраїнського референдуму після опублікування указу Президента або постанови Верховної Ради про його призначення чи проголошення?", type: "radio", opts: ["У день опублікування акта", "Наступного дня після опублікування акта", "Через 10 днів після опублікування", "Через 15 днів після опублікування"], ans: [1], exp: "Частина 1 статті 22 прямо визначає наступний день після опублікування відповідного акта як початок процесу референдуму." }, { q: "Коли за загальним правилом завершується процес референдуму після офіційного оголошення ЦВК результатів?", type: "radio", opts: ["Через 10 днів", "Через 12 днів", "Через 15 днів", "Через 30 днів"], ans: [2], exp: "Частина 2 статті 22 установлює завершення процесу через 15 днів після дня офіційного оголошення ЦВК результатів всеукраїнського референдуму." }, { q: "Якщо питання не отримало підтримки на всеукраїнському референдумі, коли найраніше можна провести новий референдум із цього питання?", type: "radio", opts: ["Наступного дня після опублікування результатів", "Не раніше ніж через шість місяців від дня оголошення результатів", "Не раніше ніж через один рік від дня оголошення результатів", "Не раніше ніж через три роки від дня голосування"], ans: [2], exp: "Частина 2 статті 4 установлює річний мінімальний проміжок для повторного референдуму з питання, яке раніше не отримало підтримки." }, { q: "Через який найраніший строк можна змінити рішення, прийняте на всеукраїнському референдумі?", type: "radio", opts: ["Через один рік", "Через три роки", "Через п’ять років", "Через шість місяців"], ans: [1], exp: "Частина 2 статті 4 установлює, що рішення може бути змінене виключно шляхом нового референдуму не раніше ніж через три роки з дня його прийняття.." }, { q: "Оберіть всі правильні твердження про обчислення строків.", type: "checkbox", opts: ["Усі строки завжди обчислюються лише в робочих днях", "День події завжди включається до строку як перший день.", "Першим днем строку, пов’язаного з певною подією, є наступний день після цієї події", "Останнім днем строку, який має закінчитися у зв’язку з настанням певної події, є день, що передує дню зазначеної події"], ans: [2, 3], exp: "Частина 2 статті 25 визначає правило початку відліку строку, а частина 3 — правило визначення його останнього дня. Інші твердження не відповідають положенням Закону." } ];
+
+        const b6_stagesData = [
+            {
+                title: "Етап 1. Повідомлення ЦВК про збори громадян", read: "статтю 30, частини 1–5",
+                notes: ["Хто може бути організатором зборів?", "Скільки виборців повинні брати участь у зборах?", "За скільки днів до зборів потрібно письмово повідомити ЦВК?", "Які відомості мають зазначити в повідомленні?", "Яку роль виконує представник ЦВК на зборах?"],
+                q1: "За скільки днів до зборів організатори мають письмово повідомити ЦВК?", opts1: ["А. Не пізніше ніж за 2 дні", "Б. Не пізніше ніж за 5 днів", "В. Не пізніше ніж за 10 днів", "Г. Не пізніше ніж за 15 днів"], ans1: 1,
+                q2: "Яка мінімальна кількість виборців повинна брати участь у зборах для утворення ініціативної групи?", opts2: ["А. 100", "Б. 200", "В. 300", "Г. 500"], ans2: 2
+            },
+            {
+                title: "Етап 2. Подання документів і реєстрація ініціативної групи", read: "статтю 30, частини 9–15, та статтю 31",
+                notes: ["Якою має бути мінімальна чисельність ініціативної групи?", "Хто подає документи до ЦВК та які документи необхідні?", "У який строк після зборів потрібно подати документи?", "Скільки часу ЦВК має на перевірку документів і прийняття рішення?", "За яких підстав ЦВК може відмовити в реєстрації?", "Що відбувається, якщо виникає питання щодо відповідності запропонованого питання Конституції України?"],
+                q1: "У який строк уповноважений представник ініціативної групи має передати документи до ЦВК після проведення зборів?", opts1: ["А. Протягом 3 днів", "Б. Протягом 5 днів", "В. Протягом 10 днів", "Г. Протягом 30 днів"], ans1: 2,
+                q2: "Скільки часу ЦВК має на аналіз документів та прийняття рішення про реєстрацію або відмову?", opts2: ["А. 5 днів", "Б. 10 днів", "В. 15 днів", "Г. 30 днів"], ans2: 1
+            },
+            {
+                title: "Етап 3. Оприлюднення інформації про реєстрацію", read: "статтю 31, частини 5–9",
+                notes: ["Коли ЦВК видає свідоцтво про реєстрацію ініціативної групи?", "Які відомості про ініціативну групу та запропоноване питання оприлюднюються?", "Де публікують цю інформацію?", "У який строк інформацію про реєстрацію та збирання підписів потрібно опублікувати?", "З якого моменту ініціативна група може почати збирати підписи?"],
+                q1: "Не пізніше якого дня після прийняття рішення про реєстрацію ЦВК видає свідоцтво про реєстрацію ініціативної групи?", opts1: ["А. Того самого дня", "Б. Наступного дня", "В. Через 5 днів", "Г. Через 10 днів"], ans1: 1,
+                q2: "У який строк оприлюднюють інформацію про реєстрацію ініціативної групи та початок і тривалість збирання підписів?", opts2: ["А. У триденний строк", "Б. У п’ятиденний строк", "В. У десятиденний строк", "Г. У місячний строк"], ans2: 0
+            },
+            {
+                title: "Етап 4. Збирання підписів на підтримку ініціативи", read: "статті 29, 32, 34–36",
+                notes: ["Хто має право збирати підписи?", "Яка загальна кількість підписів необхідна?", "У скількох областях потрібно зібрати підписи та який мінімум передбачено для кожної з них?", "Від якого моменту обчислюється строк збирання підписів?", "Скільки днів триває збирання?", "Як оформлюються та передаються підписні листи до ЦВК?", "Хто перевіряє підписи та ухвалює рішення про підсумки їх збирання?", "Що відбувається, якщо необхідних вимог не дотримано?"],
+                q1: "Яка кількість підписів потрібна для проголошення всеукраїнського референдуму за народною ініціативою?", opts1: ["А. Не менш як 1 мільйон", "Б. Не менш як 2 мільйони", "В. Не менш як 3 мільйони", "Г. Не менш як 5 мільйонів"], ans1: 2,
+                q2: "Скільки днів триває збирання підписів від дня отримання свідоцтва про реєстрацію ініціативної групи?", opts2: ["А. 30 днів", "Б. 60 днів", "В. 90 днів", "Г. 120 днів"], ans2: 2
+            },
+            {
+                title: "Етап 5. Розгляд питання Конституційним Судом України", read: "статтю 21 та статтю 31, частину 1",
+                notes: ["У яких випадках питання може бути передане на перевірку Конституційному Суду України (КСУ)?", "Хто звертається до КСУ у передбаченій статтею 31 процедурі?", "Який строк передбачено для надання КСУ висновку?", "Що відбувається з процедурою реєстрації або проголошення на час конституційного провадження?", "Які наслідки має висновок про неконституційність запропонованого питання?", "Коли та за яких умов може бути продовжено строк збирання підписів?"],
+                q1: "Не пізніше якого дня від отримання конституційного подання КСУ має надати висновок у випадках за ч. 4 ст. 21?", opts1: ["А. Не пізніше 10-го дня", "Б. Не пізніше 20-го дня", "В. Не пізніше 30-го дня", "Г. Не пізніше 60-го дня"], ans1: 2,
+                q2: "Що відбувається з народною ініціативою, якщо КСУ визнає запропоноване питання неконституційним?", opts2: ["А. Референдум проводять без змін", "Б. Народна ініціатива припиняється", "В. ЦВК автоматично призначає нові збори", "Г. Строк збирання підписів подовжується"], ans2: 1
+            },
+            {
+                title: "Етап 6. Проголошення референдуму та початок процесу", read: "статті 22 і 28, частини 1–4, а також статтю 36",
+                notes: ["Хто проголошує всеукраїнський референдум за народною ініціативою?", "Які вимоги до кількості й територіального розподілу підписів мають бути виконані?", "У який строк Президент України видає указ після отримання рішення ЦВК про підсумки збирання підписів?", "Як визначається дата проведення референдуму?", "Коли починається процес всеукраїнського референдуму?", "Які обмеження діють під час воєнного або надзвичайного стану?"],
+                q1: "Не пізніше якого дня після отримання рішення ЦВК про підсумки збирання підписів Президент України видає указ про проголошення референдуму?", opts1: ["А. На п’ятий день", "Б. На десятий день", "В. На п’ятнадцятий день", "Г. На тридцятий день"], ans1: 2,
+                q2: "Коли починається процес всеукраїнського референдуму?", opts2: ["А. У день проведення зборів громадян", "Б. У день реєстрації ініціативної групи", "В. Наступного дня після опублікування указу Президента", "Г. У день голосування"], ans2: 2
+            },
+            {
+                title: "Етап 7. Агітація під час референдуму", read: "статті 33, 74–75, 94–100",
+                notes: ["Чим агітація під час збирання підписів відрізняється від агітації щодо вже проголошеного референдуму?", "Хто може бути прихильником або опонентом питання референдуму?", "Коли ініціативна група може почати агітацію щодо референдуму?", "Коли можуть розпочати агітацію зареєстровані політичні партії та громадські організації?", "Коли агітація закінчується?", "Що заборонено під час агітації та в період перед голосуванням?", "Які вимоги встановлено до фінансування агітації?"],
+                q1: "Коли ініціативна група має право розпочати агітацію щодо вже проголошеного всеукраїнського референдуму?", opts1: ["А. Лише за 10 днів до голосування", "Б. З першого дня процесу референдуму", "В. Наступного дня після голосування", "Г. Лише після офіційного оголошення результатів"], ans1: 1,
+                q2: "Коли закінчується агітація всеукраїнського референдуму?", opts2: ["А. О 18:00 останнього четверга перед голосуванням", "Б. О 24:00 останньої п’ятниці перед днем голосування", "В. О 24:00 у день голосування", "Г. За 10 днів до голосування"], ans2: 1
+            },
+            {
+                title: "Етап 8. Голосування, встановлення та офіційне оголошення результатів", read: "статті 101–119",
+                notes: ["Як відбувається голосування та які принципи мають бути дотримані?", "Як здійснюється підрахунок голосів?", "Які комісії встановлюють підсумки голосування, а яка комісія встановлює загальні результати?", "У який строк ЦВК має встановити результати референдуму?", "У який строк результати офіційно оголошують, якщо дії ЦВК щодо складення протоколу не оскаржено до суду?", "Чим відрізняються встановлення результатів та їх офіційне оголошення?"],
+                q1: "Не пізніше якого дня з дня голосування ЦВК встановлює результати всеукраїнського референдуму?", opts1: ["А. На третій день", "Б. На п’ятий день", "В. На десятий день", "Г. На п’ятнадцятий день"], ans1: 1,
+                q2: "Якщо дії ЦВК щодо складання протоколу про результати не оскаржено до суду, не пізніше якого дня з дня встановлення результатів ЦВК офіційно оголошує їх?", opts2: ["А. На наступний день", "Б. На третій день", "В. На п’ятий день", "Г. На десятий день"], ans2: 2
+            },
+            {
+                title: "Етап 9. Завершення процесу та правові наслідки", read: "статті 4, 22, 118–122",
+                notes: ["Коли завершується процес всеукраїнського референдуму?", "Чим відрізняється завершення процесу від офіційного оголошення результатів?", "Чи потребують усі рішення референдуму затвердження органом державної влади?", "Які правові наслідки має рішення референдуму за народною ініціативою?", "Коли можна повторно винести на референдум питання, яке раніше не було підтримане?", "За яких обставин процес референдуму може припинитися або бути перерваним?"],
+                q1: "Через який строк після дня офіційного оголошення результатів завершується процес всеукраїнського референдуму?", opts1: ["А. Через 5 днів", "Б. Через 10 днів", "В. Через 15 днів", "Г. Через 30 днів"], ans1: 2,
+                q2: "Коли можна провести новий референдум із питання, яке раніше не було підтримане?", opts2: ["А. Одразу після оголошення результатів", "Б. Не раніше ніж через 6 місяців", "В. Не раніше ніж через 1 рік від дня оголошення результатів попереднього референдуму", "Г. Не раніше ніж через 3 роки в усіх випадках"], ans2: 2
+            }
+        ];
+
+        let selectedSchemeId = null;
+        let currentActiveTab = 'block1';
+
+        // ==================== ІНІЦІАЛІЗАЦІЯ І ГЕНЕРАЦІЯ ====================
+        function initApp() {
+            try {
+                // Блок 1
+                const b1Table = document.getElementById('b1_table3');
+                b1_characteristicsData.forEach(item => { b1Table.innerHTML += `<div class="grid grid-cols-[80px_1fr_80px] md:grid-cols-[120px_1fr_120px] gap-2 md:gap-4 items-center px-4 py-2 hover:bg-gray-100 border-b border-gray-100 transition-colors"><div class="flex justify-center"><label class="flex items-center justify-center cursor-pointer rounded p-2 transition b1t3-label w-full" data-correct="${item.ref}"><input type="checkbox" class="w-5 h-5 b1t3-checkbox" onchange="clearColor(this.closest('label')); saveState()"></label></div><div class="text-sm md:text-base font-medium text-gray-700 text-center px-2">${item.text}</div><div class="flex justify-center"><label class="flex items-center justify-center cursor-pointer rounded p-2 transition b1t3-label w-full" data-correct="${item.vyb}"><input type="checkbox" class="w-5 h-5 b1t3-checkbox" onchange="clearColor(this.closest('label')); saveState()"></label></div></div>`; });
+
+                // Блок 2
+                const b2Table = document.getElementById('b2_table3');
+                b2_questionsData.forEach((item, index) => { b2Table.innerHTML += `<div class="grid grid-cols-[1fr_80px_80px] md:grid-cols-[1fr_100px_100px] gap-2 md:gap-4 px-4 py-3 hover:bg-gray-100 border-b border-gray-100 transition-colors"><div class="text-sm md:text-base font-medium text-gray-800 pr-2">${item.q}<button class="text-blue-500 rounded-full border border-blue-500 w-5 h-5 inline-flex items-center justify-center text-xs ml-1 hover:bg-blue-50 transition" onclick="toggleTooltip('tt_${index}')" title="Пояснення">?</button><div id="tt_${index}" class="hidden mt-2 p-2 bg-blue-50 border border-blue-100 text-blue-800 text-xs md:text-sm rounded italic">${item.exp}</div></div><div class="flex justify-center items-start pt-1"><label class="flex items-center justify-center cursor-pointer rounded p-2 transition b2t3-label w-full" data-correct="${item.can}"><input type="checkbox" class="w-5 h-5 b2t3-checkbox" onchange="clearColor(this.closest('label')); saveState()"></label></div><div class="flex justify-center items-start pt-1"><label class="flex items-center justify-center cursor-pointer rounded p-2 transition b2t3-label w-full" data-correct="${item.cant}"><input type="checkbox" class="w-5 h-5 b2t3-checkbox" onchange="clearColor(this.closest('label')); saveState()"></label></div></div>`; });
+
+                // Блок 3
+                const b3Container = document.getElementById('b3_cards_container');
+                const principleOptsHtml = b3_principleOptions.map(p => `<option value="${p}">${p}</option>`).join('');
+                let articleOptsHtml = ''; for(let i=5; i<=14; i++) articleOptsHtml += `<option value="${i}">${i}</option>`;
+                b3_principlesData.forEach((item, index) => { b3Container.innerHTML += `<div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200 flex flex-col justify-between hover:shadow-md transition"><div class="mb-5 text-sm md:text-base text-gray-800 font-medium leading-relaxed">${item.text} <button class="text-blue-500 rounded-full border border-blue-500 w-5 h-5 inline-flex items-center justify-center text-xs ml-1 hover:bg-blue-50 transition" onclick="toggleTooltip('b3_tt_${index}')">?</button><div id="b3_tt_${index}" class="hidden mt-2 p-2 bg-blue-50 text-blue-800 text-xs rounded italic font-normal">${item.hint}</div></div><div class="flex flex-col sm:flex-row gap-2 mt-auto border-t border-gray-100 pt-3"><select id="b3_p_${index}" data-correct="${item.p}" onchange="clearColor(this); saveState()" class="flex-1 min-w-0 border border-gray-300 rounded p-2 text-sm outline-none focus:border-blue-500 transition max-w-full overflow-hidden text-ellipsis whitespace-nowrap"><option value="">-- Оберіть принцип --</option>${principleOptsHtml}</select><select id="b3_a_${index}" data-correct="${item.a}" onchange="clearColor(this); saveState()" class="w-full sm:w-28 flex-shrink-0 border border-gray-300 rounded p-2 text-sm outline-none focus:border-blue-500 transition"><option value="">-- Стаття --</option>${articleOptsHtml}</select></div></div>`; });
+                
+                // Блок 4
+                const b4Table = document.getElementById('b4_table1');
+                const b4SubOptsHtml = b4_subOptions.map(o => `<option value="${o}">${o}</option>`).join(''); const b4ActOptsHtml = b4_actOptions.map(o => `<option value="${o}">${o}</option>`).join('');
+                b4_matchData.forEach((item, i) => { b4Table.innerHTML += `<div class="grid grid-cols-[1fr_200px_200px] gap-4 px-4 py-3 hover:bg-gray-100 border-b border-gray-100 transition-colors items-center"><div class="text-sm md:text-base font-medium text-gray-800">${item.t}</div><div><select id="b4_sub_${i}" data-correct="${item.sub}" onchange="clearColor(this); saveState()" class="w-full border border-gray-300 rounded p-2 text-sm outline-none focus:border-blue-500 transition max-w-full"><option value="">-- Суб’єкт --</option>${b4SubOptsHtml}</select></div><div><select id="b4_act_${i}" data-correct="${item.act}" onchange="clearColor(this); saveState()" class="w-full border border-gray-300 rounded p-2 text-sm outline-none focus:border-blue-500 transition max-w-full"><option value="">-- Акт --</option>${b4ActOptsHtml}</select></div></div>`; });
+
+                // Блок 5.1 (Timeline)
+                const timelineContainer = document.getElementById('b5_timeline'); const sourceZone = document.getElementById('b5_source_zone');
+                b5_timelineCorrectOrder.forEach((item, i) => { timelineContainer.innerHTML += `<div class="flex items-center relative z-10 pl-8 mb-4 min-h-[4rem]"><div class="absolute left-[13px] top-1/2 -translate-y-1/2 w-3 h-3 bg-blue-500 rounded-full border-2 border-white shadow"></div><div class="drop-zone timeline-zone w-full rounded-lg bg-white/50 p-2 text-sm font-medium text-gray-700 flex flex-col justify-center transition-colors" data-correct-id="titem_${i}" ondragover="allowDrop(event)" ondrop="drop(event, this)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)"></div></div>`; });
+                let shuffledItems = [...b5_timelineCorrectOrder].map((text, i) => ({ id: `titem_${i}`, text })).sort(() => Math.random() - 0.5);
+                shuffledItems.forEach(item => { sourceZone.innerHTML += `<div id="${item.id}" class="drag-item bg-white border border-gray-200 shadow-sm rounded p-3 text-sm font-medium text-gray-800 hover:border-blue-400" draggable="true" ondragstart="dragStart(event)">${item.text}</div>`; });
+                sourceZone.ondragover = allowDrop; sourceZone.ondrop = (e) => drop(e, sourceZone); sourceZone.ondragenter = dragEnter; sourceZone.ondragleave = dragLeave;
+
+                // Блок 5.2 (Tests)
+                const b5Tests = document.getElementById('b5_tests_container');
+                b5_testsData.forEach((test, i) => {
+                    let optsHtml = test.opts.map((opt, j) => `<label class="flex items-start gap-3 p-3 border border-gray-100 rounded-lg cursor-pointer hover:bg-gray-50 transition b5test-label-${i}"><input type="${test.type}" ${test.type === 'radio' ? `name="b5_test_${i}"` : ''} value="${j}" class="mt-1 w-4 h-4 b5test-input-${i}" onchange="clearContainerColor('b5_t_${i}'); saveState()"><span class="text-gray-800 text-sm md:text-base">${opt}</span></label>`).join('');
+                    b5Tests.innerHTML += `<div><h4 class="font-bold text-[#2b4c7e] mb-3">${i+1}. ${test.q} <button class="text-blue-500 rounded-full border border-blue-500 w-5 h-5 inline-flex items-center justify-center text-xs ml-1 hover:bg-blue-50 transition" onclick="toggleTooltip('b5_exp_${i}')">?</button></h4><div id="b5_exp_${i}" class="hidden mb-3 p-3 bg-blue-50 border border-blue-100 text-blue-800 text-sm rounded italic">${test.exp}</div><div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="b5_t_${i}" data-correct='${JSON.stringify(test.ans)}' data-type="${test.type}">${optsHtml}</div></div>`;
+                });
+
+                // Блок 6 (Картки та Тести)
+                const b6Container = document.getElementById('b6_cards_container');
+                b6_stagesData.forEach((stage, i) => {
+                    const notesHtml = stage.notes.map(n => `<li class="ml-4 list-disc text-gray-600">${n}</li>`).join('');
+                    const renderTest = (q, opts, ansIndex, qNum) => {
+                        const optHtml = opts.map((opt, j) => `
+                            <label class="flex items-start gap-3 p-2.5 border border-gray-100 rounded-lg cursor-pointer hover:bg-blue-50 transition b6-lbl-${i}-${qNum}">
+                                <input type="radio" name="b6_q_${i}_${qNum}" value="${j}" class="mt-1 w-4 h-4" onchange="checkB6Q(${i}, ${qNum}, ${ansIndex}, this)">
+                                <span class="text-sm md:text-base text-gray-800">${opt}</span>
+                            </label>
+                        `).join('');
+                        return `<div class="bg-gray-50 p-4 rounded-lg border border-gray-200 shadow-sm"><p class="font-medium mb-3 text-gray-800 text-sm md:text-base">${q}</p><div class="space-y-2 flex flex-col" id="b6_q_${i}_${qNum}_container">${optHtml}</div></div>`;
+                    };
+
+                    b6Container.innerHTML += `
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 md:p-6 hover:shadow-md transition">
+                            <h3 class="text-xl font-bold text-[#2b4c7e] mb-3 border-b border-gray-100 pb-2">${stage.title}</h3>
+                            <div class="mb-5 text-sm md:text-base text-gray-700">
+                                <p class="mb-2"><span class="font-bold text-gray-800">Прочитайте:</span> <span class="bg-blue-50 px-2 py-0.5 rounded text-blue-800 font-medium">${stage.read}</span></p>
+                                <p class="font-bold mt-4 mb-2 text-gray-800">На що звернути увагу:</p>
+                                <ul class="space-y-1.5">${notesHtml}</ul>
+                            </div>
+                            <div class="border-t border-gray-100 pt-4">
+                                <div class="font-bold text-[#2b4c7e] mb-3 text-xs uppercase tracking-wider">Перевірте себе:</div>
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                                    ${renderTest(stage.q1, stage.opts1, stage.ans1, 1)}
+                                    ${renderTest(stage.q2, stage.opts2, stage.ans2, 2)}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                loadState();
+            } catch (e) { console.error("Помилка ініціалізації: ", e); }
+        }
+
+        // ==================== DRAG AND DROP ====================
+        let draggedItem = null;
+        function dragStart(e) { draggedItem = e.target; e.dataTransfer.setData('text/plain', e.target.id); setTimeout(() => e.target.style.opacity = '0.5', 0); }
+        function allowDrop(e) { e.preventDefault(); }
+        function dragEnter(e) { e.preventDefault(); let tgt = e.target.closest('.drop-zone'); if(tgt) tgt.classList.add('drag-over'); }
+        function dragLeave(e) { let tgt = e.target.closest('.drop-zone'); if(tgt) tgt.classList.remove('drag-over'); }
+        function drop(e, zone) {
+            e.preventDefault(); zone.classList.remove('drag-over');
+            if (draggedItem) {
+                draggedItem.style.opacity = '1';
+                if (zone.classList.contains('timeline-zone') && zone.children.length > 0) { const existingItem = zone.children[0]; draggedItem.parentNode.appendChild(existingItem); }
+                zone.appendChild(draggedItem); clearColor(draggedItem); draggedItem = null; saveState();
+            }
+        }
+
+        function toggleTooltip(id) { const el = document.getElementById(id); if(el) el.classList.toggle('hidden'); }
+
+        // ==================== НАВІГАЦІЯ ====================
+        function switchTab(tabId) {
+            currentActiveTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => {
+                if (el.id === tabId) {
+                    el.style.display = 'block';
+                    // Показуємо панель лише для Блоку 6
+                    const panel = document.getElementById('b6_score_panel');
+                    if(panel) panel.style.display = (tabId === 'block6') ? 'block' : 'none';
+                } else {
+                    el.style.display = 'none';
+                }
+            });
+            document.querySelectorAll('.nav-tab').forEach(btn => { btn.classList.remove('bg-white', 'text-[#2b4c7e]', 'shadow-sm'); btn.classList.add('text-white', 'hover:bg-white/10'); });
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.remove('text-white', 'hover:bg-white/10'); activeBtn.classList.add('bg-white', 'text-[#2b4c7e]', 'shadow-sm');
+            saveState();
+        }
+
+        // ==================== ЗБЕРЕЖЕННЯ / ВІДНОВЛЕННЯ ПРОГРЕСУ ====================
+        function saveState() {
+            try {
+                const b3_ans = []; b3_principlesData.forEach((_, i) => { const p=document.getElementById(`b3_p_${i}`), a=document.getElementById(`b3_a_${i}`); if(p&&a) b3_ans.push({p:p.value, a:a.value}); });
+                const b4_ans1 = []; b4_matchData.forEach((_, i) => { const s=document.getElementById(`b4_sub_${i}`), a=document.getElementById(`b4_act_${i}`); if(s&&a) b4_ans1.push({s:s.value, a:a.value}); });
+                const b5_timelineState = []; document.querySelectorAll('.timeline-zone').forEach(zone => { b5_timelineState.push(zone.children.length > 0 ? zone.children[0].id : null); });
+                const b5_testsState = []; b5_testsData.forEach((test, i) => { const inputs = document.querySelectorAll(`.b5test-input-${i}`); const checkedVals = []; inputs.forEach(inp => { if(inp.checked) checkedVals.push(parseInt(inp.value)); }); b5_testsState.push(checkedVals); });
+                
+                // Block 6
+                const b6_state = [];
+                for(let i=0; i<9; i++) {
+                    const q1 = document.querySelector(`input[name="b6_q_${i}_1"]:checked`)?.value;
+                    const q2 = document.querySelector(`input[name="b6_q_${i}_2"]:checked`)?.value;
+                    b6_state.push({ q1: q1 || null, q2: q2 || null });
+                }
+
+                const state = {
+                    sidebarWidth: document.getElementById('sidebar').style.width,
+                    sidebarCollapsed: document.getElementById('sidebar').classList.contains('sidebar-collapsed'),
+                    activeTab: currentActiveTab,
+                    b1_t1: [document.getElementById('b1_t1_1').value, document.getElementById('b1_t1_2').value, document.getElementById('b1_t1_3').value],
+                    b1_t2: document.querySelector('input[name="b1_task2"]:checked')?.value || '',
+                    b1_t3: Array.from(document.querySelectorAll('.b1t3-checkbox')).map(cb => cb.checked),
+                    b1_t4: selectedSchemeId,
+                    b2_t1: [document.getElementById('b2_t1_1').value, document.getElementById('b2_t1_2').value],
+                    b2_t3: Array.from(document.querySelectorAll('.b2t3-checkbox')).map(cb => cb.checked),
+                    b2_t4: [document.getElementById('b2_t4_1').value, document.getElementById('b2_t4_2').value],
+                    b3_t1: b3_ans, b4_t1: b4_ans1,
+                    b4_t2: [document.getElementById('b4_t2_1').value, document.getElementById('b4_t2_2').value, document.getElementById('b4_t2_3').value],
+                    b5_t1: b5_timelineState, b5_t2: b5_testsState,
+                    b6_t: b6_state
+                };
+                localStorage.setItem('referendum_v6', JSON.stringify(state));
+            } catch (e) { console.error(e); }
+        }
+
+        function loadState() {
+            const stateJSON = localStorage.getItem('referendum_v6');
+            if (!stateJSON) return;
+            try {
+                const state = JSON.parse(stateJSON);
+                
+                if (state.sidebarWidth) { const sb = document.getElementById('sidebar'); sb.style.width = state.sidebarWidth; sb.style.flexBasis = state.sidebarWidth; }
+                if (state.sidebarCollapsed) { document.getElementById('sidebar').classList.add('sidebar-collapsed'); document.getElementById('resizer').style.display = 'none'; }
+                if (state.activeTab) switchTab(state.activeTab);
+
+                if (state.b1_t1) { document.getElementById('b1_t1_1').value = state.b1_t1[0]||''; document.getElementById('b1_t1_2').value = state.b1_t1[1]||''; document.getElementById('b1_t1_3').value = state.b1_t1[2]||''; }
+                if (state.b1_t2) { const r = document.querySelector(`input[name="b1_task2"][value="${state.b1_t2}"]`); if(r) r.checked = true; }
+                if (state.b1_t3) { document.querySelectorAll('.b1t3-checkbox').forEach((cb, i) => { if(state.b1_t3[i]) cb.checked = true; }); }
+                if (state.b1_t4) { selectedSchemeId = state.b1_t4; const card = document.querySelector(`.scheme-card[onclick*="${state.b1_t4}"]`); if(card) card.classList.add('scheme-selected'); }
+                if (state.b2_t1) { document.getElementById('b2_t1_1').value = state.b2_t1[0]||''; document.getElementById('b2_t1_2').value = state.b2_t1[1]||''; }
+                if (state.b2_t3) { document.querySelectorAll('.b2t3-checkbox').forEach((cb, i) => { if(state.b2_t3[i]) cb.checked = true; }); }
+                if (state.b2_t4) { document.getElementById('b2_t4_1').value = state.b2_t4[0]||''; document.getElementById('b2_t4_2').value = state.b2_t4[1]||''; }
+                if (state.b3_t1) { state.b3_t1.forEach((ans, i) => { const p=document.getElementById(`b3_p_${i}`), a=document.getElementById(`b3_a_${i}`); if(p) p.value=ans.p||''; if(a) a.value=ans.a||''; }); }
+                if (state.b4_t1) { state.b4_t1.forEach((ans, i) => { const s=document.getElementById(`b4_sub_${i}`), a=document.getElementById(`b4_act_${i}`); if(s) s.value=ans.s||''; if(a) a.value=ans.a||''; }); }
+                if (state.b4_t2) { document.getElementById('b4_t2_1').value=state.b4_t2[0]||''; document.getElementById('b4_t2_2').value=state.b4_t2[1]||''; document.getElementById('b4_t2_3').value=state.b4_t2[2]||''; }
+                if (state.b5_t1) { const zones = document.querySelectorAll('.timeline-zone'); state.b5_t1.forEach((itemId, i) => { if (itemId) { const el = document.getElementById(itemId); if(el) zones[i].appendChild(el); } }); }
+                if (state.b5_t2) { state.b5_t2.forEach((checkedVals, i) => { const inputs = document.querySelectorAll(`.b5test-input-${i}`); inputs.forEach(inp => { if(checkedVals.includes(parseInt(inp.value))) inp.checked = true; }); }); }
+                
+                // Block 6
+                if (state.b6_t) {
+                    state.b6_t.forEach((ans, i) => {
+                        if (ans.q1 !== null) { 
+                            const inp = document.querySelector(`input[name="b6_q_${i}_1"][value="${ans.q1}"]`);
+                            if(inp) { inp.checked = true; checkB6Q(i, 1, b6_stagesData[i].ans1, inp); }
+                        }
+                        if (ans.q2 !== null) { 
+                            const inp = document.querySelector(`input[name="b6_q_${i}_2"][value="${ans.q2}"]`);
+                            if(inp) { inp.checked = true; checkB6Q(i, 2, b6_stagesData[i].ans2, inp); }
+                        }
+                    });
+                }
+
+                setTimeout(() => {
+                    checkB1T1(); checkB1T2(); checkB1T3(); checkB1T4();
+                    checkB2T1(); checkB2T3(); checkB2T4();
+                    checkB3T1(); checkB4T1(); checkB4T2(); checkB5T1(); checkB5T2();
+                    updateB6Score();
+                }, 150);
+
+            } catch (e) { console.error(e); }
+        }
+
+        document.addEventListener('change', (e) => { if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT') saveState(); });
+        document.addEventListener('keyup', (e) => { if(e.target.tagName==='INPUT'&&e.target.type==='text') saveState(); });
+
+        // ==================== ПОВЗУНОК ТА ІНТЕРФЕЙС ====================
+        const sidebar = document.getElementById('sidebar'); const resizer = document.getElementById('resizer'); const lawIframe = document.getElementById('lawIframe'); let isResizing = false;
+        document.getElementById('toggleSidebar').addEventListener('click', () => { sidebar.classList.toggle('sidebar-collapsed'); resizer.style.display = sidebar.classList.contains('sidebar-collapsed') ? 'none' : 'block'; saveState(); });
+        document.getElementById('closeSidebarInner').addEventListener('click', () => { sidebar.classList.add('sidebar-collapsed'); resizer.style.display = 'none'; saveState(); });
+        resizer.addEventListener('mousedown', () => { isResizing=true; lawIframe.style.pointerEvents='none'; document.body.style.cursor='col-resize'; document.body.style.userSelect='none'; });
+        window.addEventListener('mousemove', (e) => { if(!isResizing) return; let nw=e.clientX; if(nw>250 && nw<window.innerWidth*0.7){ sidebar.style.width=nw+'px'; sidebar.style.flexBasis=nw+'px'; } });
+        window.addEventListener('mouseup', () => { if(isResizing){ isResizing=false; lawIframe.style.pointerEvents='auto'; document.body.style.cursor=''; document.body.style.userSelect=''; saveState(); } });
+        document.getElementById('fullscreenBtn').addEventListener('click', () => { if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(e=>console.log(e)); else document.exitFullscreen(); });
+        document.getElementById('clearAnswersBtn').addEventListener('click', () => {
+            if(confirm('Очистити всі відповіді в усіх блоках? Прогрес буде повністю втрачено.')) {
+                localStorage.removeItem('referendum_v6');
+                document.querySelectorAll('input[type="text"], select').forEach(el => { el.value=''; clearColor(el); });
+                document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => { el.checked=false; el.disabled=false; const lbl=el.closest('label'); if(lbl) clearColor(lbl); });
+                document.querySelectorAll('.scheme-card').forEach(c => c.classList.remove('scheme-selected','correct-bg','incorrect-bg'));
+                selectedSchemeId = null;
+                const sourceZone = document.getElementById('b5_source_zone'); document.querySelectorAll('.drag-item').forEach(el => { sourceZone.appendChild(el); clearColor(el); });
+                updateB6Score();
+                saveState();
+            }
+        });
+
+        // ==================== ФУНКЦІЇ ПЕРЕВІРКИ ====================
+        function clearColor(element) { element.classList.remove('correct-bg', 'incorrect-bg'); }
+        function clearContainerColor(containerId) { const container = document.getElementById(containerId); container.classList.remove('correct-bg', 'incorrect-bg'); container.querySelectorAll('label').forEach(l => l.classList.remove('correct-bg', 'incorrect-bg')); }
+
+        // Блок 1-4
+        function checkB1T1() { const a={b1_t1_1:"прямої",b1_t1_2:"українським народом",b1_t1_3:"голосування"}; for(const[id,val] of Object.entries(a)){ const el=document.getElementById(id); if(!el.value) continue; if(el.value===val){el.classList.add('correct-bg');el.classList.remove('incorrect-bg');}else{el.classList.add('incorrect-bg');el.classList.remove('correct-bg');} } }
+        function checkB1T2() { const sel=document.querySelector('input[name="b1_task2"]:checked'); if(!sel)return; clearContainerColor('b1_t2_container'); if(sel.value==="Ні")sel.closest('label').classList.add('correct-bg'); else sel.closest('label').classList.add('incorrect-bg'); }
+        function checkB1T3() { document.querySelectorAll('.b1t3-label').forEach(lbl=>{const cb=lbl.querySelector('input'); if(cb.checked){if(lbl.getAttribute('data-correct')==="true"){lbl.classList.add('correct-bg');lbl.classList.remove('incorrect-bg');}else{lbl.classList.add('incorrect-bg');lbl.classList.remove('correct-bg');}}else lbl.classList.remove('correct-bg','incorrect-bg');}); }
+        function selectScheme(card, id) { document.querySelectorAll('.scheme-card').forEach(c=>c.classList.remove('scheme-selected','correct-bg','incorrect-bg')); card.classList.add('scheme-selected'); selectedSchemeId=id; saveState(); }
+        function checkB1T4() { if(!selectedSchemeId)return; const c=document.querySelector('.scheme-selected'); if(selectedSchemeId==='scheme-3'){c.classList.add('correct-bg');c.classList.remove('scheme-selected','incorrect-bg');}else{c.classList.add('incorrect-bg');c.classList.remove('scheme-selected','correct-bg');} }
+        function checkTextExact(id) { const el=document.getElementById(id); const val=el.value.trim().toLowerCase(); if(!val)return; if(val===el.getAttribute('data-correct').toLowerCase()){el.classList.add('correct-bg');el.classList.remove('incorrect-bg');}else{el.classList.add('incorrect-bg');el.classList.remove('correct-bg');} }
+        function checkB2T1() { checkTextExact('b2_t1_1'); checkTextExact('b2_t1_2'); }
+        function checkB2T3() { document.querySelectorAll('.b2t3-label').forEach(lbl=>{const cb=lbl.querySelector('input'); if(cb.checked){if(lbl.getAttribute('data-correct')==="true"){lbl.classList.add('correct-bg');lbl.classList.remove('incorrect-bg');}else{lbl.classList.add('incorrect-bg');lbl.classList.remove('correct-bg');}}else lbl.classList.remove('correct-bg','incorrect-bg');}); }
+        function checkB2T4() { const el1=document.getElementById('b2_t4_1'); const v1=el1.value.trim().toLowerCase(); if(v1){if(v1==="1"||v1==="одне"){el1.classList.add('correct-bg');el1.classList.remove('incorrect-bg');}else{el1.classList.add('incorrect-bg');el1.classList.remove('correct-bg');}} checkTextExact('b2_t4_2'); }
+        function checkB3T1() { b3_principlesData.forEach((_,i)=>{const p=document.getElementById(`b3_p_${i}`); const a=document.getElementById(`b3_a_${i}`); if(p&&p.value){if(p.value===p.getAttribute('data-correct')){p.classList.add('correct-bg');p.classList.remove('incorrect-bg');}else{p.classList.add('incorrect-bg');p.classList.remove('correct-bg');}} if(a&&a.value){if(a.value===a.getAttribute('data-correct')){a.classList.add('correct-bg');a.classList.remove('incorrect-bg');}else{a.classList.add('incorrect-bg');a.classList.remove('correct-bg');}} }); }
+        function checkB4T1() { b4_matchData.forEach((_,i)=>{ const s=document.getElementById(`b4_sub_${i}`); const a=document.getElementById(`b4_act_${i}`); if(s&&s.value){if(s.value===s.getAttribute('data-correct')){s.classList.add('correct-bg');s.classList.remove('incorrect-bg');}else{s.classList.add('incorrect-bg');s.classList.remove('correct-bg');}} if(a&&a.value){if(a.value===a.getAttribute('data-correct')){a.classList.add('correct-bg');a.classList.remove('incorrect-bg');}else{a.classList.add('incorrect-bg');a.classList.remove('correct-bg');}} }); }
+        function checkB4T2() { const rules = { 'b4_t2_1': ["3", "трьох"], 'b4_t2_2': ["2/3", "двох третинах"], 'b4_t2_3': ["100", "сто"] }; for(let id in rules){ const el = document.getElementById(id); const val = el.value.trim().toLowerCase(); if(val){ if(rules[id].includes(val)){el.classList.add('correct-bg');el.classList.remove('incorrect-bg');}else{el.classList.add('incorrect-bg');el.classList.remove('correct-bg');} } } checkTextExact('b4_t2_4'); }
+
+        // Блок 5
+        function checkB5T1() { document.querySelectorAll('.timeline-zone').forEach(zone => { if(zone.children.length > 0) { const item = zone.children[0]; if(item.id === zone.getAttribute('data-correct-id')) { item.classList.add('correct-bg'); item.classList.remove('incorrect-bg'); } else { item.classList.add('incorrect-bg'); item.classList.remove('correct-bg'); } } }); }
+        function checkB5T2() { b5_testsData.forEach((test, i) => { const container = document.getElementById(`b5_t_${i}`); const correctAns = JSON.parse(container.getAttribute('data-correct')); const inputs = document.querySelectorAll(`.b5test-input-${i}`); let checkedVals = []; inputs.forEach((inp, idx) => { if(inp.checked) checkedVals.push(idx); }); if (checkedVals.length === 0) return; inputs.forEach((inp, idx) => { const label = inp.closest('label'); label.classList.remove('correct-bg', 'incorrect-bg'); if (inp.checked) { if (correctAns.includes(idx)) label.classList.add('correct-bg'); else label.classList.add('incorrect-bg'); } }); }); }
+
+        // Блок 6 (Миттєва перевірка з блокуванням та підрахунок)
+        function checkB6Q(stageIndex, qNum, correctIndex, inputEl) {
+            const container = document.getElementById(`b6_q_${stageIndex}_${qNum}_container`);
+            const selectedVal = parseInt(inputEl.value);
+            const labels = container.querySelectorAll(`label`);
+            const inputs = container.querySelectorAll(`input`);
+
+            // Блокуємо всі радіо-кнопки цього питання після кліку
+            inputs.forEach(inp => inp.disabled = true);
+
+            labels.forEach((lbl, idx) => {
+                lbl.classList.remove('correct-bg', 'incorrect-bg');
+                if (idx === correctIndex) {
+                    lbl.classList.add('correct-bg');
+                } else if (idx === selectedVal && selectedVal !== correctIndex) {
+                    lbl.classList.add('incorrect-bg');
+                }
+            });
+
+            saveState();
+            updateB6Score();
+        }
+
+        function updateB6Score() {
+            let correctCount = 0;
+            let answeredCount = 0;
+            const totalQuestions = 18;
+
+            for(let i=0; i<9; i++) {
+                for(let qNum=1; qNum<=2; qNum++) {
+                    const ans = b6_stagesData[i][`ans${qNum}`];
+                    const selected = document.querySelector(`input[name="b6_q_${i}_${qNum}"]:checked`);
+                    if (selected) {
+                        answeredCount++;
+                        if (parseInt(selected.value) === ans) {
+                            correctCount++;
+                        }
+                    }
+                }
+            }
+
+            const countSpan = document.getElementById('b6_correct_count');
+            const pctSpan = document.getElementById('b6_percentage');
+            const bar = document.getElementById('b6_progress_bar');
+            
+            countSpan.innerText = correctCount;
+            const percentage = Math.round((correctCount / totalQuestions) * 100);
+            pctSpan.innerText = percentage + '%';
+            bar.style.width = percentage + '%';
+            
+            // Стилізація залежно від результату
+            if (answeredCount === 0) {
+                countSpan.className = 'text-gray-400 text-xl md:text-2xl';
+                pctSpan.className = 'text-gray-400 text-xl md:text-2xl w-12 md:w-16 text-right';
+                bar.className = 'bg-gray-400 h-full rounded-full transition-all duration-700 w-0';
+            } else if(percentage < 50) { 
+                countSpan.className = 'text-red-500 text-xl md:text-2xl';
+                pctSpan.className = 'text-red-500 text-xl md:text-2xl w-12 md:w-16 text-right font-bold';
+                bar.className = 'bg-red-500 h-full rounded-full transition-all duration-700'; 
+            } else if(percentage < 80) { 
+                countSpan.className = 'text-yellow-500 text-xl md:text-2xl';
+                pctSpan.className = 'text-yellow-500 text-xl md:text-2xl w-12 md:w-16 text-right font-bold';
+                bar.className = 'bg-yellow-400 h-full rounded-full transition-all duration-700'; 
+            } else { 
+                countSpan.className = 'text-green-500 text-xl md:text-2xl';
+                pctSpan.className = 'text-green-500 text-xl md:text-2xl w-12 md:w-16 text-right font-bold';
+                bar.className = 'bg-green-500 h-full rounded-full transition-all duration-700'; 
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', initApp);
+
+    </script>
+</body>
+</html>
